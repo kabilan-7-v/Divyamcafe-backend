@@ -21,7 +21,7 @@ exports.AddPlace = async(req, res) => {
         try {
             // Save to MongoDB
             const newPost = await addPost.create({
-                name: imageurls,
+                imageurls,
                 heading,
                 description,
                 locationUrl
@@ -48,7 +48,7 @@ exports.updatePlace = async (req, res) => {
         // Find and update the place by ID
         const updatedPost = await addPost.findByIdAndUpdate(
             id, 
-            { name: imageurls, heading, description, locationUrl },
+            { imageurls, heading, description, locationUrl },
             { new: true } // Return updated document
         );
 
@@ -59,6 +59,15 @@ exports.updatePlace = async (req, res) => {
         return res.status(200).json({ message: "Post updated successfully", post: updatedPost });
     } catch (error) {
         console.error("Error updating post:", error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+exports.getPlaces = async (req, res) => {
+    try {
+        const places = await addPost.find();
+        return res.status(200).json({ message: "Places retrieved successfully", places });
+    } catch (error) {
+        console.error("Error fetching places:", error);
         return res.status(500).json({ message: "Internal Server Error" });
     }
 };
