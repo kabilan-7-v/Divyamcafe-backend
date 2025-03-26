@@ -15,7 +15,7 @@ exports.Logincreate = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create new user
-        const newUser = await User.create({ username, password: hashedPassword });
+        const newUser = await User.create({ username, password: hashedPassword,islogin:true });
 
         console.log("User created successfully:", newUser);
 
@@ -48,8 +48,12 @@ exports.Loginverify = async (req, res) => {
             return res.status(401).json({ message: "Invalid username or password" });
         }
 
+        // Update isLogin status in the database
+        user.isLogin = true;
+        await user.save();
+
         console.log("User logged in successfully:", username);
-        return res.status(200).json({ message: "Login successful" });
+        return res.status(200).json({ message: "Login successful", isLogin: true });
 
     } catch (error) {
         console.error("Error during login:", error);
