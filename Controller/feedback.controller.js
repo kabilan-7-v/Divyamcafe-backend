@@ -1,19 +1,32 @@
 const Feedback = require("../Models/Addfeedback.model.js");
-
 exports.addFeedback = async (req, res) => {
     try {
-        const { msg, writtername, date, isbutton } = req.body;
+        const { name, email, phone, feedback, isbutton } = req.body;
 
         // Validation check
-        if (!msg || !writtername || !date || isbutton === undefined) {
+
+        if (!name || !email || !phone || !feedback  ) {
             return res.status(400).json({ message: "All fields are required" });
+        }
+
+        // Additional validation for email and phonenumber
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^\d{10}$/; // Assuming a 10-digit phone number
+
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ message: "Invalid email format" });
+        }
+
+        if (!phoneRegex.test(phone)) {
+            return res.status(400).json({ message: "Invalid phone number format" });
         }
 
         // Create new feedback entry
         const newFeedback = await Feedback.create({
-            msg,
-            writtername,
-            date,
+            name,
+            email,
+            phone,
+            feedback,
             isbutton
         });
 
@@ -51,6 +64,21 @@ exports.updateFeedbackIsButton = async (req, res) => {
 
     } catch (error) {
         console.error("Error updating feedback:", error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+exports.getAllFeedbacks = async (req, res) => {
+    try {
+        // Fetch all feedback entries from the database
+        const feedbacks = await Feedback.find();
+
+        if (!feedbacks || feedbacks.length === 0) {
+            return res.status(404).json({ message: "No feedbacks found" });
+        }
+
+        return res.status(200).json({ message: "Feedbacks retrieved successfully", feedbacks });
+    } catch (error) {
+        console.error("Error fetching feedbacks:", error);
         return res.status(500).json({ message: "Internal Server Error" });
     }
 };

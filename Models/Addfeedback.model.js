@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 
 const FeedbackSchema = new mongoose.Schema({
-    msg: { type: String, required: true },
-    writtername: { type: String, required: true },
-    date: { type: Date, default: Date.now },  // Automatically stores the current date
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    phone: { type: String, required: true },
+    feedback: { type: String, required: true },
     isbutton: { type: Boolean, default: true }
 }, { timestamps: true });
 
