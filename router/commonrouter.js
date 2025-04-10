@@ -18,7 +18,7 @@ route.put("/updatefeedback/:id",updateFeedbackIsButton)
 route.get("/getplace", getPlaces)
 route.get("/getmenucard", getmenucards)
 route.put("/feedback/:id", updateFeedbackIsButton);
-route.put("/feedbackhomepageupdate/:id", updateFeedbackIshomepage);
+route.put("/updatefeedbackhomepage/:id", updateFeedbackIshomepage);
 
 
 route.delete("/deletemenucard/:id", deletemenucard);
